@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Modern Login Page | AsmrProg</title>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form>
+                <h1>  </h1>
+                <h1>🚀</h1>
+                <h1>Стартуем?...</h1>
+                
+                <button id="importButton">Начать</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form>
+                <h2>Выберите Ваш статус</h2>
+                
+                <p>Учавствуй в голосованиях или создавай креативных дизайн!</p>
+                
+                <button onclick="openCreater()">Дизайнер</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h2>Отлично, остался последний шаг!</h2>
+                    <p>текст для объяснения правил пользователю</p>
+                    <button class="hidden" id="login">Назад</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h2>Добро пожаловать!</h2>
+                    <p>Получи коллекционную майку от TeeFision</p>
+                    <button class="hidden" id="register">Пользователь</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
