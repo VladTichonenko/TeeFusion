@@ -19,13 +19,14 @@ function toggleActive(img) {
 }
 
 document.getElementById("importButton").onclick = function() {
-    window.open("kabinet.html", "_blank");}
+    window.open('kabinet.html', '_blank');
+}
 
     document.getElementById("register").onclick = function() {
         document.getElementById("productTable").style.display = "table";
     }
     document.getElementById("back").onclick = function() {
-        window.open("index.html");
+        window.location.href='index.html';
     };
 
     function openUser() {
@@ -51,15 +52,21 @@ document.getElementById("importButton").onclick = function() {
                     }
                 });
 function openNFT() {
-                    window.open('about.html', '_blank');
+    window.location.href='about.html';
                 }
 
                 function openGlav() {
-                    window.open('index.html', '_blank');
+                    window.location.href='index.html';
                 }
                 function openGolos() {
-                    window.open('test.html', '_blank');
+                    window.location.href='test.html';
                 }
                 function openSto() {
-                    window.open('testik.html', '_blank');
+                    window.location.href='testik.html';
+                }
+                function Nazad() {
+                    window.location.href='index.html';
+                }
+                function openCabinet() {
+                    window.location.href='kabinet.html';
                 }
