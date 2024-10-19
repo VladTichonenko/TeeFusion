@@ -4,16 +4,37 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 import asyncio
 import config
 import keyboard
+from aiogram import Router
+import requests
 
+router=Router()
 bot = Bot(token=config.TOKEN)
+
+
 
 # Создаем роутер
 router = Router()
 
-# Обработчик команды /start
 @router.message(CommandStart())
 async def start_handler(message: types.Message):
-    await message.answer("Добро пожаловать в проект TeeFision", reply_markup=keyboard.glav_ru)
+    user_id = message.from_user.id
+    username = message.from_user.username or "Без ника"
+
+    # Отправляем запрос на создание пользователя через API
+    try:
+        response = requests.post(f'http://your-api-url.com/users', json={ # сюда вставить ссылку на сайт и сотавить апи users
+            'user_id': user_id,
+            'name': username,
+            'balance': 5  # Начальный баланс может быть 0 или любым другим значением
+        })
+
+        if response.status_code == 201:  # Если пользователь успешно создан
+            await message.answer(f"Добро пожаловать в проект TeeFision, {username}!", reply_markup=keyboard.glav_ru)
+        else:
+            await message.answer("Ошибка при создании пользователя. Попробуйте позже.")
+    except Exception as e:
+        await message.answer("Произошла ошибка при создании пользователя. Попробуйте позже.")
+        print(f"Ошибка при отправке запроса на создание пользователя: {e}")
 
 # Обработчики callback_query
 

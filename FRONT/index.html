@@ -18,7 +18,7 @@
                 <h1>🚀</h1>
                 <h1>Стартуем?...</h1>
                 
-                <button id= "importButton">Начать</button>
+                <button onclick="openUser()">Начать</button>
             </form>
         </div>
         <div class="form-container sign-in">
@@ -44,7 +44,29 @@
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const registerBtn = document.getElementById('register');
+
+function openCreater() {
+    window.open('creator.html', '_blank');
+}
+
+
+const container = document.getElementById('container');
+const loginBtn = document.getElementById('login');
+
+registerBtn.addEventListener('click', () => {
+    container.classList.add("active");
+});
+
+loginBtn.addEventListener('click', () => {
+    container.classList.remove("active");
+});
+
+function openUser() {
+        window.open('kabinet.html', '_blank');
+    }
+    </script>
 </body>
 
 </html>
