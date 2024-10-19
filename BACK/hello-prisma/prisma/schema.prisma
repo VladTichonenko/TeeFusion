@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  name      String
+  balance   Int      @default(5)
+  votes     Vote[]
+}
+
+model Vote {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id])
+  photo1Url     String
+  photo2Url     String
+  votesForPhoto1 Int     @default(0)
+  votesForPhoto2 Int     @default(0)
+  votersForPhoto1 Int[]  @default([])
+  votersForPhoto2 Int[]  @default([])
+  closed        Boolean  @default(false) // Поле для отслеживания закрытия голосования
+  winner        String?  // Поле для победителя
+}
