@@ -19,7 +19,7 @@ loginBtn.addEventListener('click', () => {
 // }
 
 document.getElementById("importButton").onclick = function() {
-    window.open('kabinet.html', '_blank');
+    window.location.href='kabinet.html';
 }
 
     // document.getElementById("register").onclick = function() {
@@ -72,7 +72,8 @@ function openNFT() {
 //============== KABINET.HTML ==================
 
 document.addEventListener('DOMContentLoaded', function() {
-    const userId = 1; // Замените на реальный ID пользователя
+    const urlParts = window.location.pathname.split('/'); // Разделяем путь URL
+    const userId = urlParts[urlParts.length - 1]; // Предполагается, что user_id — последний элемент в пути
     const container = document.getElementById('container');
     const messageElement = document.getElementById('message');
 
@@ -143,7 +144,11 @@ document.addEventListener('DOMContentLoaded', function() {
         } 
     }
 
-    function openNFT() { 
+    
+    
+})
+
+function openNFT() { 
         window.location.href='about.html'; 
     } 
 
@@ -153,8 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openSto() { 
         window.location.href='testik.html'; 
-    } 
-});
+    }
 
 //========INDEX.HTML============
 
@@ -163,11 +167,18 @@ const registerBtn = document.getElementById('register');
 function openCreater() {
     window.open('creator.html', '_blank');
 }
-// НЕ РАБОАТЕТ
-document.getElementById("register").onclick = function() {
-    document.getElementById("productTable").style.display = "container";
-}
 
+
+const container = document.getElementById('container');
+const loginBtn = document.getElementById('login');
+
+registerBtn.addEventListener('click', () => {
+    container.classList.add("active");
+});
+
+loginBtn.addEventListener('click', () => {
+    container.classList.remove("active");
+});
 
 
 //=========TEST.HTML=========
@@ -271,3 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'kabinet.html'; 
     } 
 });
+
+function openTest() { 
+    window.location.href='test.html'; 
+} 

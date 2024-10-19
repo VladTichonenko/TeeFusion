@@ -14,25 +14,13 @@
             justify-content: center;
             flex-direction: column;
             height: 100vh;
-            position: relative; /* Добавлено для позиционирования кнопки "Назад" */
-        }
-        .transparent {
-            opacity: 0.2; /* Уменьшенная прозрачность для изображения */
+            position: relative;
         }
 
         #timer {
             font-size: 40px;
             margin-bottom: 20px;
-            background-color: #7c7689;
-            color: #ccc;
-        }
-
-        #scale {
-            width: 100%;
-            height: 30px;
-            background-color: #e0e0e0;
-            position: relative;
-            margin-bottom: 20px;
+            color: #ccc; /* Убираем фон, меняем только цвет текста */
         }
 
         img {
@@ -40,6 +28,7 @@
             height: 200px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            transition: opacity 0.3s;
         }
 
         button {
@@ -62,12 +51,12 @@
             flex-direction: column;
             align-items: center;
         }
-        
+
         #result {
-            font-family: 'Arial Black', Arial, sans-serif; /* Устанавливаем жирный шрифт */
-            font-size: 20px; /* Увеличиваем размер текста */
-            color: #333; /* Цвет текста для лучшей видимости */
-            margin-top: 15px; /* Отступ сверху */
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 20px;
+            color: #333;
+            margin-top: 15px;
         }
 
         .image-container {
@@ -80,57 +69,105 @@
             width: 200px;
             height: auto;
             margin: 0 20px;
-            transition: opacity 0.9s; /* Плавный переход при изменении прозрачности */
+            transition: opacity 0.9s;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        /* Стили для кнопки "Назад" */
         .back-button {
-            position: absolute; /* Позиционирование кнопки относительно родителя */
-            bottom: 20px; /* Расстояние от нижней части экрана */
-            left: 50%; /* Центрируем по горизонтали */
-            transform: translateX(-50%); /* Сдвигаем влево на половину ширины кнопки */
-            padding: 15px 30px; /* Отступы кнопки */
-            background-color: #a46ce7; /* Цвет фона кнопки */
-            color: #fff; /* Цвет текста кнопки */
-            border: none; /* Убираем рамку */
-            border-radius: 50px; /* Овальная форма кнопки */
-            font-size: 18px; /* Размер шрифта */
-            cursor: pointer; /* Курсор при наведении */
-            transition: background-color 0.3s; /* Плавный переход цвета фона */
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            background-color: #a46ce7;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .back-button:hover {
-            background-color: #3e286e; /* Цвет фона при наведении */
+            background-color: #3e286e;
         }
     </style>
 </head>
 <body>
-    <div id="timer">00:00:<span id="time">30</span></div>
-    <div id="scale"></div>
-    <p id="result"></p>
+    <div id="timer">Оставшееся время: <span id="time">30</span> сек</div>
+    
     <div class="options">
         <div class="image-container">
             <div>
-                <img id="image1" src="D:\BiTry\Ton Comunity\Importo\web\img\майка.jpg" alt="Фото 1">
-                <button id="button1" onclick="vote(1)">Голосовать</button>
+                <img id="image1" src="img\c62d5eec-bab2-41ca-8f1a-d2d3dd3bc6dc.jfif" alt="Фото 1" onclick="vote(1)">
                 <div class="vote-count" id="count1">0</div>
             </div>
             <div>
-                <img id="image2" src="D:\BiTry\Ton Comunity\Importo\web\img\майка.jpg" alt="Фото 2">
-                <button id="button2" onclick="vote(2)">Голосовать</button>
+                <img id="image2" src="img\f0253ef6-d560-4e48-8efd-95fb4c7b4e28.jfif" alt="Фото 2" onclick="vote(2)">
                 <div class="vote-count" id="count2">0</div>
             </div>
         </div>
     </div>
     <div id="result" class="result hidden"></div>
 
-    <!-- Кнопка "Назад" -->
     <button class="back-button" onclick="Nazad()">Назад</button>
 
-    <script src="competition.js"></script>
+    <script>
+        let remainingTime = localStorage.getItem('remainingTime') || 30;
+        let interval;
+    
+        // Таймер
+        function startTimer() {
+            const timerElement = document.getElementById("time");
+            interval = setInterval(() => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    localStorage.setItem('remainingTime', remainingTime); // Сохраняем в localStorage
+                    timerElement.textContent = remainingTime;
+                } else {
+                    clearInterval(interval);
+                    localStorage.removeItem('remainingTime');
+                }
+            }, 1000);
+        }
+    
+        startTimer();
+    
+        // Логика голосования
+        async function vote(imageId) {
+            const urlParts = window.location.pathname.split('/'); // Разделяем путь URL
+            const userId = urlParts[urlParts.length - 1]; // Предполагается, что user_id — последний элемент в пути
+            const voteId = 1; // ID голосования
+    
+            try {
+                const response = await fetch(`/votes/${voteId}/vote`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ photo: imageId, userId })
+                });
+    
+                const data = await response.json();
+    
+                if (response.ok) {
+                    // Обновляем интерфейс
+                    if (imageId === 1) {
+                        document.getElementById("image1").style.opacity = 0.5;
+                        document.getElementById("image2").style.opacity = 1;
+                    } else {
+                        document.getElementById("image2").style.opacity = 0.5;
+                        document.getElementById("image1").style.opacity = 1;
+                    }
+                    document.getElementById(`count${imageId}`).textContent = data[`votesForPhoto${imageId}`];
+                } else {
+                    alert(data.error || 'Ошибка при голосовании');
+                }
+            } catch (error) {
+                alert('Произошла ошибка при голосовании');
+            }
+        }
+        function Nazad() {
+            window.location.href = 'kabinet.html';
+        }
+    </script>
+    
 </body>
 </html>
