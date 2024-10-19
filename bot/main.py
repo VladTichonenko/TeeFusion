@@ -30,7 +30,7 @@ async def back_handler(callback_query: types.CallbackQuery):
 @router.callback_query(lambda query: query.data == 'chat_ru')
 async def chat_handler(callback_query: types.CallbackQuery):
     await callback_query.message.delete()
-    await callback_query.message.answer("Список наших чатов 📝\n chat1\n chat2\n chat3", reply_markup=keyboard.Back)
+    await callback_query.message.answer("Список наших чатов 📝\n https://t.me/BelarusTON \n https://t.me/ITtbcstudio", reply_markup=keyboard.Back)
 
 @router.callback_query(lambda query: query.data == 'about')
 async def about_handler(callback_query: types.CallbackQuery):
@@ -43,7 +43,7 @@ async def admin_handler(message: types.Message):
     # Счётчик уведомлений (в реальной логике его нужно получать динамически, например, из базы данных)
     count = 0  # Примерное значение количества уведомлений
 
-    if message.from_user.id in [765843635, 165566970]:
+    if message.from_user.id in [765843635, 165566970, 6850731097]:
         # Формируем клавиатуру с динамическим количеством уведомлений
         admin_keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text=f"Мои уведомления💡 [{count}]", callback_data='note')],
