@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,32 +7,28 @@
     <link rel="stylesheet" href="style.css">
     <title>Modern Login Page | AsmrProg</title>
 </head>
-
 <body>
-
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form>
                 <div>
-                    
                     <img src="D:\BiTry\Ton Comunity\Importo\web\img\майка.jpg" alt="Майка 1" style="width: 100px; height: auto;">
                     <p>Майка 1</p>
-                    <button id="voteButton1">✅</button>
+                    <button type="button" id="voteButton1">✅</button>
                 </div>
                 <br>
                 <div>
-                    
-                    <img src="D:\BiTry\Ton Comunity\Importo\web\img\майка.jpg" alt="Майка 1" style="width: 100px; height: auto; gap: 40px;">
+                    <img src="D:\BiTry\Ton Comunity\Importo\web\img\майка.jpg" alt="Майка 2" style="width: 100px; height: auto;">
                     <p>Майка 2</p>
-                    <button id="voteButton2">✅</button>
+                    <button type="button" id="voteButton2">✅</button>
                 </div>
             </form>
-          
         </div>
+        
         <div class="form-container sign-in">
             <form>
                 <h1>TeeFision</h1>  
-                <p>👤:Vlad_Tichonenko</p>
+                <p>👤:<span id="username">Vlad_Tichonenko</span></p>
                 <span> </span>
                 <button type="button" onclick="openNFT()">Мои NFT🌟</button>
                 <button type="button" onclick="openSto()">Что-то пускай будет</button>
@@ -41,33 +36,34 @@
             </form>
             <style>
                 button {
-    width: 100%; /* Задает кнопкам ширину 100% от родительского элемента */
-    padding: 10px;
-    background-color: #a373f0; /* Цвет фона кнопки */
-    color: white; /* Цвет текста */
-    border: none; /* Убираем стандартное оформление границы */
-    border-radius: 5px; /* Скругляем углы кнопки */
-    cursor: pointer; /* Указатель курсора при наведении */
-    margin-top: 10px; /* Отступ между кнопками */
-    font-size: 16px; /* Размер шрифта */
-}
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #a373f0;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    margin-top: 10px;
+                    font-size: 16px;
+                }
 
-button:hover {
-    background-color: #be7beb; /* Цвет фона при наведении */
-}
+                button:hover {
+                    background-color: #be7beb;
+                }
             </style>
         </div>
+        
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
                     <h2>Какая майка Вам нравится больше?</h2>
-                    <p>текст для объяснения правил пользователю</p>
+                    <p>Текст для объяснения правил пользователю</p>
                     <button class="hidden" id="login">Назад</button>
                 </div>
                 <div class="toggle-panel toggle-right">
                     <h3>Мой баланс 💰</h3>
                     <p>Ваш баланс: <span id="balance">5</span> баллов</p>
-                    <button class="hidden"onclick="openGolos()">Голосовать</button>
+                    <button class="hidden" id="voteButton">Голосовать</button>
                 </div>
             </div>
         </div>
@@ -75,5 +71,4 @@ button:hover {
 
     <script src="script.js"></script>
 </body>
-
 </html>
