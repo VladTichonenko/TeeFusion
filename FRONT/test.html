@@ -93,7 +93,7 @@
     </style>
 </head>
 <body>
-    <div id="timer">Оставшееся время: <span id="time">30</span> сек</div>
+    <div id="timer">Оставшееся время: <span id="time">...</span></div>
     
     <div class="options">
         <div class="image-container">
@@ -112,61 +112,88 @@
     <button class="back-button" onclick="Nazad()">Назад</button>
 
     <script>
-        let remainingTime = localStorage.getItem('remainingTime') || 30;
-        let interval;
-    
-        // Таймер
-        function startTimer() {
-            const timerElement = document.getElementById("time");
-            interval = setInterval(() => {
-                if (remainingTime > 0) {
-                    remainingTime--;
-                    localStorage.setItem('remainingTime', remainingTime); // Сохраняем в localStorage
-                    timerElement.textContent = remainingTime;
-                } else {
-                    clearInterval(interval);
-                    localStorage.removeItem('remainingTime');
-                }
-            }, 1000);
+        let remainingTime = localStorage.getItem('remainingTime') || 43200; // 12 часов в секундах
+let interval;
+
+// Форматирование времени
+function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+// Таймер
+function startTimer() {
+    const timerElement = document.getElementById("time");
+    interval = setInterval(() => {
+        if (remainingTime > 0) {
+            remainingTime--;
+            localStorage.setItem('remainingTime', remainingTime); // Сохраняем в localStorage
+            timerElement.textContent = formatTime(remainingTime);
+        } else {
+            clearInterval(interval);
+            localStorage.removeItem('remainingTime');
         }
+    }, 1000);
+}
+
+startTimer();
+
+
     
-        startTimer();
-    
-        // Логика голосования
-        async function vote(imageId) {
-            const urlParts = window.location.pathname.split('/'); // Разделяем путь URL
-            const userId = urlParts[urlParts.length - 1]; // Предполагается, что user_id — последний элемент в пути
-            const voteId = 1; // ID голосования
-    
-            try {
-                const response = await fetch(`/votes/${voteId}/vote`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ photo: imageId, userId })
-                });
-    
-                const data = await response.json();
-    
-                if (response.ok) {
-                    // Обновляем интерфейс
-                    if (imageId === 1) {
-                        document.getElementById("image1").style.opacity = 0.5;
-                        document.getElementById("image2").style.opacity = 1;
-                    } else {
-                        document.getElementById("image2").style.opacity = 0.5;
-                        document.getElementById("image1").style.opacity = 1;
-                    }
-                    document.getElementById(`count${imageId}`).textContent = data[`votesForPhoto${imageId}`];
-                } else {
-                    alert(data.error || 'Ошибка при голосовании');
-                }
-            } catch (error) {
-                alert('Произошла ошибка при голосовании');
-            }
+
+// Логика голосования
+function vote(imageId) {
+    try {
+        // Проверяем, проголосовал ли пользователь
+        const hasVoted = JSON.parse(localStorage.getItem('hasVoted')) || false;
+
+        if (hasVoted) {
+            alert('Вы уже проголосовали!');
+            return;
         }
-        function Nazad() {
-            window.location.href = 'kabinet.html';
+
+        // Сохраняем голос в localStorage
+        const votes = JSON.parse(localStorage.getItem('votes')) || { image1: 0, image2: 0 };
+        votes[`image${imageId}`] += 1;
+        localStorage.setItem('votes', JSON.stringify(votes));
+        localStorage.setItem('hasVoted', true);
+
+        // Обновляем интерфейс
+        if (imageId === 1) {
+            document.getElementById("image1").style.opacity = 0.5;
+            document.getElementById("image2").style.opacity = 1;
+        } else {
+            document.getElementById("image2").style.opacity = 0.5;
+            document.getElementById("image1").style.opacity = 1;
         }
+        document.getElementById(`count${imageId}`).textContent = votes[`image${imageId}`];
+    } catch (error) {
+        alert('Произошла ошибка при голосовании');
+    }
+}
+
+function Nazad() {
+    window.location.href = 'kabinet.html';
+}
+
+// Проверяем статус голосования при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const hasVoted = JSON.parse(localStorage.getItem('hasVoted')) || false;
+    const votes = JSON.parse(localStorage.getItem('votes')) || { image1: 0, image2: 0 };
+
+    document.getElementById("count1").textContent = votes.image1;
+    document.getElementById("count2").textContent = votes.image2;
+
+    if (hasVoted) {
+        alert('Вы уже проголосовали!');
+        // Блокируем возможность голосования
+        document.getElementById("image1").onclick = null;
+        document.getElementById("image2").onclick = null;
+    }
+});
+
     </script>
     
 </body>
