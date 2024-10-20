@@ -3,10 +3,12 @@ const { PrismaClient } = require('../hello-prisma/node_modules/@prisma/client');
 const bodyParser = require('body-parser');
 const path =require('path');
 
-
+const urlParts = window.location.pathname.split('/'); 
+const userId = urlParts[urlParts.length - 1]; 
 
 const prisma = new PrismaClient();
 const app = express();
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,'../../FRONT')));
 
 app.get('/',(req,res) =>{
@@ -15,10 +17,14 @@ res.sendFile(path.join(__dirname,'public','../../FRONT','index.html'));
 
 // 1. Создание пользователя
 app.post('/users', async (req, res) => {
-  const { name, balance } = req.body;
+  const { name, balance, user_id } = req.body;
   try {
     const user = await prisma.user.create({
-      data: { name, balance: balance || 0 }
+      data: { 
+        user_id, 
+        name, 
+        balance: balance || 5 
+      }
     });
     res.json(user);
   } catch (error) {
@@ -26,12 +32,13 @@ app.post('/users', async (req, res) => {
   }
 });
 
+
 // 2. Получение данных пользователя
-app.get('/users/:id', async (req, res) => {
-  const { id } = req.params;
+app.get('/users/:user_id', async (req, res) => {
+  const { user_id } = req.params;
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(id) }
+      where: { user_id: parseInt(user_id) }
     });
     res.json(user);
   } catch (error) {
@@ -250,27 +257,27 @@ app.put('/votes/:id/vote', async (req, res) => {
   }
 });
 
-// Маршрут для получения user_id из URL
-app.get('/tma/:user_id', async (req, res) => {
-  const userId = req.params.user_id; // Получаем user_id из параметров URL
+// // Маршрут для получения user_id из URL
+// app.get('/tma/:user_id', async (req, res) => {
+//   const userId = req.params.user_id; // Получаем user_id из параметров URL
 
-  try {
-      // Здесь вы можете использовать userId для выполнения запросов к базе данных
-      const user = await prisma.user.findUnique({
-          where: { user_id: parseInt(userId) }, // Предполагается, что user_id - это число
-      });
+//   try {
+//       // Здесь вы можете использовать userId для выполнения запросов к базе данных
+//       const user = await prisma.user.findUnique({
+//           where: { user_id: parseInt(userId) }, // Предполагается, что user_id - это число
+//       });
 
-      if (!user) {
-          return res.status(404).json({ error: 'Пользователь не найден' });
-      }
+//       if (!user) {
+//           return res.status(404).json({ error: 'Пользователь не найден' });
+//       }
 
-      // Если пользователь найден, вы можете вернуть данные или выполнить другие действия
-      res.json(user);
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Ошибка при получении данных пользователя' });
-  }
-});
+//       // Если пользователь найден, вы можете вернуть данные или выполнить другие действия
+//       res.json(user);
+//   } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Ошибка при получении данных пользователя' });
+//   }
+// });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,async () => {
